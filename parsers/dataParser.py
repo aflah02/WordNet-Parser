@@ -1,4 +1,3 @@
-import pandas as pd
 def createDataDF(filePath, Isverb=False):
     with open(filePath) as f:
         Datadump = f.readlines()
@@ -36,6 +35,7 @@ def createDataDF(filePath, Isverb=False):
                 ls_fnum_wnum.append([splitLine[currIndex],splitLine[currIndex+1]])
                 currIndex += 3
             ls.append(ls_fnum_wnum)
+        currIndex += 1
         ls.append(" ".join(splitLine[currIndex:]))
         dataLines[i] = ls
     if (Isverb):
