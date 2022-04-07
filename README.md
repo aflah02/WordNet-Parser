@@ -10,4 +10,4 @@ To extract database files run:
 
 Data Source - https://wordnet.princeton.edu/download/current-version
 
-Data Format Source - https://wordnet.princeton.edu/documentation/wndb5wn
+Data Format Source - https://wordnet.princeton.edu/documentation/wndb5wn , https://wordnet.princeton.edu/documentation/senseidx5wn
