@@ -10,9 +10,6 @@ def createIndexDF(filePath):
             indexLines.append(i.strip())
     for i in range(len(indexLines)):
         splitLine = indexLines[i].split()
-        if (len(splitLine) == 8):
-            indexLines[i] = splitLine
-            continue
         ls = []
         ls.extend(splitLine[0:4])
         p_cnt = int(ls[-1])
