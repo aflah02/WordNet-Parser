@@ -1,5 +1,4 @@
 import pandas as pd
-
 def createIndexDF(filePath):
     with open(filePath) as f:
         Indexdump = f.readlines()
