@@ -9,4 +9,5 @@ To extract database files run ->
 `tar -xf WNdb-3.0.tar.gz`
 
 Data Source - https://wordnet.princeton.edu/download/current-version
+
 Data Format Source - https://wordnet.princeton.edu/documentation/wndb5wn
