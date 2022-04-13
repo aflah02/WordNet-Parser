@@ -1,4 +1,4 @@
-## Custom Parser for WordNet
+## Custom Parser for WordNet (Currently Limited to Synonym Extraction)
 
 To run:
     ```
