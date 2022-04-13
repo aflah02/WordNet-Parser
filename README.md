@@ -2,7 +2,6 @@
 
 To run:
     ```
-    Clone the Repository
     python .\FindSynonym.py
     ```
 
