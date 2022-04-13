@@ -35,11 +35,10 @@ To extract database files run:
 
 `tar -xf WNdb-3.0.tar.gz`
 
-Data Source - 
+Sources - 
 - https://wordnet.princeton.edu/download/current-version
-
-Data Format Sources - 
 - https://wordnet.princeton.edu/documentation/wndb5wn 
 - https://wordnet.princeton.edu/documentation/senseidx5wn
 - https://wordnet.princeton.edu/documentation/wninput5wn
 - https://globalwordnet.github.io/gwadoc/
+- https://www.youtube.com/watch?v=krqrIwNak3Q
