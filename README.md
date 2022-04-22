@@ -1,6 +1,11 @@
-## Custom Parser for WordNet (Currently Limited to Synonym Extraction)
+## Custom Parser for WordNet (Currently Limited to Synonym Extraction with WordNet Lemmatization)
 
-To run:
+To run Synonym Extraction with Lemmatization:
+    ```
+    python .\WordNetMorphy.py
+    ```
+    
+To run Synonym Extraction naively without Lemmatization:
     ```
     python .\FindSynonym.py
     ```
@@ -20,3 +25,4 @@ Sources -
 - https://wordnet.princeton.edu/documentation/wninput5wn
 - https://globalwordnet.github.io/gwadoc/
 - https://www.youtube.com/watch?v=krqrIwNak3Q
+- https://wordnet.princeton.edu/documentation/morphy7wn 
