@@ -1,3 +1,5 @@
+from FindSynonym import *
+
 SuffixRulesForNouns = {
     's' : [''],
     'ses' : ['s'],
@@ -66,31 +68,64 @@ for i in range(len(verbException)):
 def WordNetLemmatizer(word, pos):
     candidateWord = []
     if pos == 'noun':
+        if word in nounExceptionDict.keys():
+            for replacementWord in nounExceptionDict[word]:
+                candidateWord.append(replacementWord)
+        for word in candidateWord:
+            if list_synonyms(word):
+                return list_synonyms(word)
+        candidateWord = []
         for suffix, replacement in SuffixRulesForNouns.items():
             if word.endswith(suffix):
                 for replacementWord in replacement:
                     candidateWord.append(word[:-len(suffix)] + replacementWord)
-        if word in nounExceptionDict.keys():
-            for replacementWord in nounExceptionDict[word]:
-                candidateWord.append(replacementWord)
+        for word in candidateWord:
+            if list_synonyms(word):
+                return list_synonyms(word)
+        candidateWord = []
     elif pos == 'verb':
+        if word in verbExceptionDict.keys():
+            for replacementWord in verbExceptionDict[word]:
+                candidateWord.append(replacementWord)
+        for word in candidateWord:
+            if list_synonyms(word):
+                return list_synonyms(word)
+        candidateWord = []
         for suffix, replacement in SuffixRulesForVerbs.items():
             if word.endswith(suffix):
                 for replacementWord in replacement:
                     candidateWord.append(word[:-len(suffix)] + replacementWord)
-        if word in verbExceptionDict.keys():
-            for replacementWord in verbExceptionDict[word]:
-                candidateWord.append(replacementWord)
+        for word in candidateWord:
+            if list_synonyms(word):
+                return list_synonyms(word)
+        candidateWord = []
     elif pos == 'adj':
+        if word in adjExceptionDict.keys():
+            for replacementWord in adjExceptionDict[word]:
+                candidateWord.append(replacementWord)
+        for word in candidateWord:
+            if list_synonyms(word):
+                return list_synonyms(word)
+        candidateWord = []
         for suffix, replacement in SuffixRulesForAdjectives.items():
             if word.endswith(suffix):
                 for replacementWord in replacement:
                     candidateWord.append(word[:-len(suffix)] + replacementWord)
-        if word in adjExceptionDict.keys():
-            for replacementWord in adjExceptionDict[word]:
-                candidateWord.append(replacementWord)
+        for word in candidateWord:
+            if list_synonyms(word):
+                return list_synonyms(word)
+        candidateWord = []
     elif pos == 'adv':
         if word in advExceptionDict.keys():
             for replacementWord in advExceptionDict[word]:
                 candidateWord.append(replacementWord)
+        for word in candidateWord:
+            if list_synonyms(word):
+                return list_synonyms(word)
+        candidateWord = []
+    return "Not Found"
     
+if __name__ == '__main__':
+    word = input("Enter a word: ")
+    pos = input("Enter a part of speech: ")
+    print(WordNetLemmatizer(word, pos))
