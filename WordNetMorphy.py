@@ -8,6 +8,7 @@ SuffixRulesForNouns = {
     "men" : ["man"],
     "ies": ["y"],
 }
+
 SuffixRulesForVerbs = {
     "s" : [""],
     "ies": ["y"],
@@ -15,6 +16,7 @@ SuffixRulesForVerbs = {
     "ed": ["e", ""],
     "ing": ["e", ""]
 }
+
 SuffixRulesForAdjectives = {
     "er" : ["e",""],
     "est": ["e", ""],
@@ -32,7 +34,7 @@ for i in range(len(adjException)):
     adjException[i] = adjException[i].split(' ')
     if adjException[i][0] not in adjExceptionDict.keys():
         adjExceptionDict[adjException[i][0]] = []
-    adjExceptionDict[adjException[i][0]] = adjException[i][1]
+    adjExceptionDict[adjException[i][0]].append(adjException[i][1].replace('-', ' '))
 
 with open(advExceptionPath) as f:
     advException = f.read().splitlines()
@@ -41,7 +43,7 @@ for i in range(len(advException)):
     advException[i] = advException[i].split(' ')
     if advException[i][0] not in advExceptionDict.keys():
         advExceptionDict[advException[i][0]] = []
-    advExceptionDict[advException[i][0]] = advException[i][1]
+    advExceptionDict[advException[i][0]].append(advException[i][1].replace('-', ' '))
 
 with open(nounExceptionPath) as f:
     nounException = f.read().splitlines()
@@ -50,7 +52,7 @@ for i in range(len(nounException)):
     nounException[i] = nounException[i].split(' ')
     if nounException[i][0] not in nounExceptionDict.keys():
         nounExceptionDict[nounException[i][0]] = []
-    nounExceptionDict[nounException[i][0]] = nounException[i][1]
+    nounExceptionDict[nounException[i][0]].append(nounException[i][1].replace('-', ' '))
 
 with open(verbExceptionPath) as f:
     verbException = f.read().splitlines()
@@ -59,7 +61,7 @@ for i in range(len(verbException)):
     verbException[i] = verbException[i].split(' ')
     if verbException[i][0] not in verbExceptionDict.keys():
         verbExceptionDict[verbException[i][0]] = []
-    verbExceptionDict[verbException[i][0]] = verbException[i][1]
+    verbExceptionDict[verbException[i][0]].append(verbException[i][1].replace('-', ' '))
 
 def WordNetLemmatizer(word, pos):
     candidateWord = []
