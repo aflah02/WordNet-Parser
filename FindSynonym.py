@@ -26,6 +26,8 @@ for lemma, synset in zip(lemmas, synsets):
 def list_synonyms(lemma, lemma_synset_map = lemma_synset_map, synset_lemma_map = synset_lemma_map):
     lemma = lemma.lower()
     synonyms = []
+    if lemma not in lemma_synset_map.keys():
+        return []
     synsets = lemma_synset_map[lemma]
     for synset in synsets:
         synonyms.extend(synset_lemma_map[synset])

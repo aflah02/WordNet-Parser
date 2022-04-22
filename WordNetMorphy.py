@@ -65,7 +65,9 @@ for i in range(len(verbException)):
         verbExceptionDict[verbException[i][0]] = []
     verbExceptionDict[verbException[i][0]].append(verbException[i][1].replace('-', ' '))
 
-def WordNetLemmatizer(word, pos):
+def WordNetSynonymFinder(word, pos):
+    if list_synonyms(word) != []:
+        return list_synonyms(word)
     candidateWord = []
     if pos == 'noun':
         if word in nounExceptionDict.keys():
@@ -126,6 +128,9 @@ def WordNetLemmatizer(word, pos):
     return "Not Found"
     
 if __name__ == '__main__':
-    word = input("Enter a word: ")
-    pos = input("Enter a part of speech: ")
-    print(WordNetLemmatizer(word, pos))
+    while True:
+        word = input("Enter a word (Enter Empty String to Exit): ")
+        if word == '':
+            break
+        pos = input("Enter a part of speech: ")
+        print(WordNetSynonymFinder(word, pos))
