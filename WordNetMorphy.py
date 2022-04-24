@@ -35,8 +35,8 @@ adjExceptionDict = {}
 for i in range(len(adjException)):
     adjException[i] = adjException[i].split(' ')
     if adjException[i][0] not in adjExceptionDict.keys():
-        adjExceptionDict[adjException[i][0]] = []
-    adjExceptionDict[adjException[i][0]].append(adjException[i][1].replace('-', ' '))
+        adjExceptionDict[adjException[i][0].replace('-', ' ')] = []
+    adjExceptionDict[adjException[i][0].replace('-', ' ')].append(adjException[i][1].replace('-', ' '))
 
 with open(advExceptionPath) as f:
     advException = f.read().splitlines()
@@ -44,8 +44,8 @@ advExceptionDict = {}
 for i in range(len(advException)):
     advException[i] = advException[i].split(' ')
     if advException[i][0] not in advExceptionDict.keys():
-        advExceptionDict[advException[i][0]] = []
-    advExceptionDict[advException[i][0]].append(advException[i][1].replace('-', ' '))
+        advExceptionDict[advException[i][0].replace('-', ' ')] = []
+    advExceptionDict[advException[i][0].replace('-', ' ')].append(advException[i][1].replace('-', ' '))
 
 with open(nounExceptionPath) as f:
     nounException = f.read().splitlines()
@@ -62,69 +62,203 @@ verbExceptionDict = {}
 for i in range(len(verbException)):
     verbException[i] = verbException[i].split(' ')
     if verbException[i][0] not in verbExceptionDict.keys():
-        verbExceptionDict[verbException[i][0]] = []
-    verbExceptionDict[verbException[i][0]].append(verbException[i][1].replace('-', ' '))
+        verbExceptionDict[verbException[i][0].replace('-', ' ')] = []
+    verbExceptionDict[verbException[i][0].replace('-', ' ')].append(verbException[i][1].replace('-', ' '))
 
 def WordNetSynonymFinder(word, pos):
-    if list_synonyms(word) != []:
-        return list_synonyms(word)
+    word = word.lower()
+    searchWord = word.replace(' ', '_')
+    if list_synonyms(searchWord) != []:
+        return list_synonyms(searchWord)
     candidateWord = []
     if pos == 'noun':
-        if word in nounExceptionDict.keys():
-            for replacementWord in nounExceptionDict[word]:
-                candidateWord.append(replacementWord)
-        for word in candidateWord:
-            if list_synonyms(word):
-                return list_synonyms(word)
-        candidateWord = []
-        for suffix, replacement in SuffixRulesForNouns.items():
-            if word.endswith(suffix):
-                for replacementWord in replacement:
-                    candidateWord.append(word[:-len(suffix)] + replacementWord)
-        for word in candidateWord:
-            if list_synonyms(word):
-                return list_synonyms(word)
+        if word.count(' ') > 0:
+            ls_word = word.split(' ')
+            for i in range(len(ls_word)):
+                if ls_word[i] in nounExceptionDict.keys():
+                    for replacement in nounExceptionDict[ls_word[i]]:
+                        candidateWord.append(ls_word[:i] + [replacement] + ls_word[i+1:])
+            for word in candidateWord:
+                if list_synonyms('_'.join(word)) != []:
+                    return list_synonyms('_'.join(word))
+            candidateWord = []
+            for i in range(len(ls_word)):
+                for suffix, replacement in SuffixRulesForNouns.items():
+                    if ls_word[i].endswith(suffix):
+                        for replacementWord in replacement:
+                            candidateWord.append(ls_word[:i] + [ls_word[i][:-len(suffix)] + replacementWord] + ls_word[i+1:])
+            for word in candidateWord:
+                if list_synonyms('_'.join(word)) != []:
+                    return list_synonyms('_'.join(word))
+        elif word.count('-') > 0:
+            ls_word = word.split('-')
+            for i in range(len(ls_word)):
+                if ls_word[i] in nounExceptionDict.keys():
+                    for replacement in nounExceptionDict[ls_word[i]]:
+                        candidateWord.append(ls_word[:i] + [replacement] + ls_word[i+1:])
+            for word in candidateWord:
+                if list_synonyms('_'.join(word)) != []:
+                    return list_synonyms('_'.join(word))
+            candidateWord = []
+            for i in range(len(ls_word)):
+                for suffix, replacement in SuffixRulesForNouns.items():
+                    if ls_word[i].endswith(suffix):
+                        for replacementWord in replacement:
+                            candidateWord.append(ls_word[:i] + [ls_word[i][:-len(suffix)] + replacementWord] + ls_word[i+1:])
+            for word in candidateWord:
+                if list_synonyms('_'.join(word)) != []:
+                    return list_synonyms('_'.join(word))
+        else:
+            if word in nounExceptionDict.keys():
+                for replacementWord in nounExceptionDict[word]:
+                    candidateWord.append(replacementWord)
+            for word in candidateWord:
+                if list_synonyms(word):
+                    return list_synonyms(word)
+            candidateWord = []
+            for suffix, replacement in SuffixRulesForNouns.items():
+                if word.endswith(suffix):
+                    for replacementWord in replacement:
+                        candidateWord.append(word[:-len(suffix)] + replacementWord)
+            for word in candidateWord:
+                if list_synonyms(word):
+                    return list_synonyms(word)
         candidateWord = []
     elif pos == 'verb':
-        if word in verbExceptionDict.keys():
-            for replacementWord in verbExceptionDict[word]:
-                candidateWord.append(replacementWord)
-        for word in candidateWord:
-            if list_synonyms(word):
-                return list_synonyms(word)
-        candidateWord = []
-        for suffix, replacement in SuffixRulesForVerbs.items():
-            if word.endswith(suffix):
-                for replacementWord in replacement:
-                    candidateWord.append(word[:-len(suffix)] + replacementWord)
-        for word in candidateWord:
-            if list_synonyms(word):
-                return list_synonyms(word)
-        candidateWord = []
+        if word.count(' ') > 0:
+            ls_word = word.split(' ')
+            for i in range(len(ls_word)):
+                if ls_word[i] in verbExceptionDict.keys():
+                    for replacement in verbExceptionDict[ls_word[i]]:
+                        candidateWord.append(ls_word[:i] + [replacement] + ls_word[i+1:])
+            for word in candidateWord:
+                if list_synonyms('_'.join(word)) != []:
+                    return list_synonyms('_'.join(word))
+            candidateWord = []
+            for i in range(len(ls_word)):
+                for suffix, replacement in SuffixRulesForVerbs.items():
+                    if ls_word[i].endswith(suffix):
+                        for replacementWord in replacement:
+                            candidateWord.append(ls_word[:i] + [ls_word[i][:-len(suffix)] + replacementWord] + ls_word[i+1:])
+            for word in candidateWord:
+                if list_synonyms('_'.join(word)) != []:
+                    return list_synonyms('_'.join(word))
+        elif word.count('-') > 0:
+            ls_word = word.split('-')
+            for i in range(len(ls_word)):
+                if ls_word[i] in verbExceptionDict.keys():
+                    for replacement in verbExceptionDict[ls_word[i]]:
+                        candidateWord.append(ls_word[:i] + [replacement] + ls_word[i+1:])
+            for word in candidateWord:
+                if list_synonyms('_'.join(word)) != []:
+                    return list_synonyms('_'.join(word))
+            candidateWord = []
+            for i in range(len(ls_word)):
+                for suffix, replacement in SuffixRulesForVerbs.items():
+                    if ls_word[i].endswith(suffix):
+                        for replacementWord in replacement:
+                            candidateWord.append(ls_word[:i] + [ls_word[i][:-len(suffix)] + replacementWord] + ls_word[i+1:])
+            for word in candidateWord:
+                if list_synonyms('_'.join(word)) != []:
+                    return list_synonyms('_'.join(word))
+        else:
+            if word in verbExceptionDict.keys():
+                for replacementWord in verbExceptionDict[word]:
+                    candidateWord.append(replacementWord)
+            for word in candidateWord:
+                if list_synonyms(word):
+                    return list_synonyms(word)
+            candidateWord = []
+            for suffix, replacement in SuffixRulesForVerbs.items():
+                if word.endswith(suffix):
+                    for replacementWord in replacement:
+                        candidateWord.append(word[:-len(suffix)] + replacementWord)
+            for word in candidateWord:
+                if list_synonyms(word):
+                    return list_synonyms(word)
+            candidateWord = []
     elif pos == 'adj':
-        if word in adjExceptionDict.keys():
-            for replacementWord in adjExceptionDict[word]:
-                candidateWord.append(replacementWord)
-        for word in candidateWord:
-            if list_synonyms(word):
-                return list_synonyms(word)
-        candidateWord = []
-        for suffix, replacement in SuffixRulesForAdjectives.items():
-            if word.endswith(suffix):
-                for replacementWord in replacement:
-                    candidateWord.append(word[:-len(suffix)] + replacementWord)
-        for word in candidateWord:
-            if list_synonyms(word):
-                return list_synonyms(word)
-        candidateWord = []
+        if word.count(' ') > 0:
+            ls_word = word.split(' ')
+            for i in range(len(ls_word)):
+                if ls_word[i] in adjExceptionDict.keys():
+                    for replacement in adjExceptionDict[ls_word[i]]:
+                        candidateWord.append(ls_word[:i] + [replacement] + ls_word[i+1:])
+            for word in candidateWord:
+                if list_synonyms('_'.join(word)) != []:
+                    return list_synonyms('_'.join(word))
+            candidateWord = []
+            for i in range(len(ls_word)):
+                for suffix, replacement in SuffixRulesForAdjectives.items():
+                    if ls_word[i].endswith(suffix):
+                        for replacementWord in replacement:
+                            candidateWord.append(ls_word[:i] + [ls_word[i][:-len(suffix)] + replacementWord] + ls_word[i+1:])
+            for word in candidateWord:
+                if list_synonyms('_'.join(word)) != []:
+                    return list_synonyms('_'.join(word))
+        elif word.count('-') > 0:
+            ls_word = word.split('-')
+            for i in range(len(ls_word)):
+                if ls_word[i] in adjExceptionDict.keys():
+                    for replacement in adjExceptionDict[ls_word[i]]:
+                        candidateWord.append(ls_word[:i] + [replacement] + ls_word[i+1:])
+            for word in candidateWord:
+                if list_synonyms('_'.join(word)) != []:
+                    return list_synonyms('_'.join(word))
+            candidateWord = []
+            for i in range(len(ls_word)):
+                for suffix, replacement in SuffixRulesForAdjectives.items():
+                    if ls_word[i].endswith(suffix):
+                        for replacementWord in replacement:
+                            candidateWord.append(ls_word[:i] + [ls_word[i][:-len(suffix)] + replacementWord] + ls_word[i+1:])
+            for word in candidateWord:
+                if list_synonyms('_'.join(word)) != []:
+                    return list_synonyms('_'.join(word))
+        else:
+            if word in adjExceptionDict.keys():
+                for replacementWord in adjExceptionDict[word]:
+                    candidateWord.append(replacementWord)
+            for word in candidateWord:
+                if list_synonyms(word):
+                    return list_synonyms(word)
+            candidateWord = []
+            for suffix, replacement in SuffixRulesForAdjectives.items():
+                if word.endswith(suffix):
+                    for replacementWord in replacement:
+                        candidateWord.append(word[:-len(suffix)] + replacementWord)
+            for word in candidateWord:
+                if list_synonyms(word):
+                    return list_synonyms(word)
+            candidateWord = []
     elif pos == 'adv':
-        if word in advExceptionDict.keys():
-            for replacementWord in advExceptionDict[word]:
-                candidateWord.append(replacementWord)
-        for word in candidateWord:
-            if list_synonyms(word):
-                return list_synonyms(word)
-        candidateWord = []
+        if word.count(' ') > 0:
+            ls_word = word.split(' ')
+            for i in range(len(ls_word)):
+                if ls_word[i] in advExceptionDict.keys():
+                    for replacement in advExceptionDict[ls_word[i]]:
+                        candidateWord.append(ls_word[:i] + [replacement] + ls_word[i+1:])
+            for word in candidateWord:
+                if list_synonyms('_'.join(word)) != []:
+                    return list_synonyms('_'.join(word))
+            candidateWord = []
+        elif word.count('-') > 0:
+            ls_word = word.split('-')
+            for i in range(len(ls_word)):
+                if ls_word[i] in advExceptionDict.keys():
+                    for replacement in advExceptionDict[ls_word[i]]:
+                        candidateWord.append(ls_word[:i] + [replacement] + ls_word[i+1:])
+            for word in candidateWord:
+                if list_synonyms('_'.join(word)) != []:
+                    return list_synonyms('_'.join(word))
+            candidateWord = []
+        else:
+            if word in advExceptionDict.keys():
+                for replacementWord in advExceptionDict[word]:
+                    candidateWord.append(replacementWord)
+            for word in candidateWord:
+                if list_synonyms(word):
+                    return list_synonyms(word)
+            candidateWord = []
     return "Not Found"
     
 if __name__ == '__main__':
